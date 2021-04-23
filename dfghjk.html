@@ -98,26 +98,27 @@ function loop() {
   context.fillStyle = 'red';
   context.fillRect(apple.x, apple.y, grid-1, grid-1);
 
-  // draw snake one cell at a time
+  // dibuixa una serp una cel·la a la vegada
   context.fillStyle = 'green';
   snake.cells.forEach(function(cell, index) {
 
-    // drawing 1 px smaller than the grid creates a grid effect in the snake body so you can see how long it is
+    // dibuixar 1 px més petit que la quadrícula crea un efecte de quadrícula al cos de la serp perquè pugueu veure quant de temps té
+
     context.fillRect(cell.x, cell.y, grid-1, grid-1);
 
-    // snake ate apple
+    // la serp va menjar poma
     if (cell.x === apple.x && cell.y === apple.y) {
       snake.maxCells++;
 
-      // canvas is 400x400 which is 25x25 grids
+      // el llenç té 400x400, és a dir, quadrícules de 25x25
       apple.x = getRandomInt(0, 25) * grid;
       apple.y = getRandomInt(0, 25) * grid;
     }
 
-    // check collision with all cells after this one (modified bubble sort)
+    // diable col·lisió amb totes les cel·les després d'aquest (tipus de bombolla modificat)
     for (var i = index + 1; i < snake.cells.length; i++) {
 
-      // snake occupies same space as a body part. reset game
+      //la serp ocupa el mateix espai que una part del cos. restableix el joc
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
         snake.x = 160;
         snake.y = 160;
@@ -133,36 +134,39 @@ function loop() {
   });
 }
 
-// listen to keyboard events to move the snake
-document.addEventListener('keydown', function(e) {
-  // prevent snake from backtracking on itself by checking that it's
-  // not already moving on the same axis (pressing left while moving
-  // left won't do anything, and pressing right while moving left
-  // shouldn't let you collide with your own body)
+// escolta els esdeveniments del teclat per moure la serp
 
-  // left arrow key
+document.addEventListener('keydown', function(e) {
+  //Eviteu que la serp retrocedeixi en si mateixa comprovant que sigui
+  // que no es mou en el mateix eix (prement cap a l’esquerra mentre es mou
+  // l'esquerra no farà res i prement la dreta mentre es mou cap a l'esquerra
+  // no us ha de deixar xocar amb el vostre propi cos)
+
+
+
+  // tecla de fletxa esquerra
   if (e.which === 37 && snake.dx === 0) {
     snake.dx = -grid;
     snake.dy = 0;
   }
-  // up arrow key
+  // tecla de fletxa cap amunt
   else if (e.which === 38 && snake.dy === 0) {
     snake.dy = -grid;
     snake.dx = 0;
   }
-  // right arrow key
+  // tecla de fletxa dreta
   else if (e.which === 39 && snake.dx === 0) {
     snake.dx = grid;
     snake.dy = 0;
   }
-  // down arrow key
+  // tecla de fletxa avall
   else if (e.which === 40 && snake.dy === 0) {
     snake.dy = grid;
     snake.dx = 0;
   }
 });
 
-// start the game
+// començar el joc
 requestAnimationFrame(loop);
 </script>
 </body>
