@@ -13,34 +13,58 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
   }
   canvas {
     border: 1px solid white;
+    background-image: url('Pixel_art_grass_image.png');
   }
+  audio{
+    visibility:  hidden;
+  }
+#a{
+  display: block;
+  height: 200px;
+  width: 200px;
+  background-color: yellow;
+}
   </style>
 </head>
 <body>
-<canvas width="600" height="600" id="game"></canvas>
+
+  <audio id="audio" controls style="display:none">
+  <source src="comer.mp3" type="audio/mpeg"> Your browser does not support the audio element.
+</audio>
+<audio id="choque" controls style="display:none">
+<source src="jab-jab.mp3" type="audio/mpeg"> Your browser does not support the audio element.
+</audio>
+
+
+<canvas width="800" height="800" id="game"></canvas>
 <script>
 
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
+var puntos = 0;
 
 var grid = 16;
 var count = 0;
+var score = 0;
+
 
 var snake = {
   x: 160,
   y: 160,
 
-  // snake velocity. moves one grid length every frame in either the x or y direction
+  // velocidad de la serpiente. mueve una longitud de cuadrícula en cada fotograma en la dirección xo y
+
   dx: grid,
   dy: 0,
 
-  // keep track of all grids the snake body occupies
+  // realiza un seguimiento de todas las cuadrículas que ocupa el cuerpo de la serpiente
   cells: [],
 
-  // length of the snake. grows when eating an apple
+  // longitud de la serpiente. crece al comer una manzana
   maxCells: 2
 };
 var apple = {
@@ -48,8 +72,8 @@ var apple = {
   y: 320
 };
 
-// get random whole numbers in a specific range
-// @see https://stackoverflow.com/a/1527820/2124254
+// obtener números enteros aleatorios en un rango específico
+// @ver https://stackoverflow.com/a/1527820/2124254
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -58,49 +82,112 @@ function getRandomInt(min, max) {
 function loop() {
   requestAnimationFrame(loop);
 
-  // slow game loop to 15 fps instead of 60 (60/15 = 4)
-  if (++count < 1) {
+  // bucle de juego lento a 15 fps en lugar de 60 (60/15 = 4)
+  if (++count < 6) {
     return;
   }
 
   count = 0;
   context.clearRect(0,0,canvas.width,canvas.height);
 
-  // move snake by it's velocity
+  // mueve la serpiente por su velocidad
   snake.x += snake.dx;
   snake.y += snake.dy;
 
-  // wrap snake position horizontally on edge of screen
+     // si surt de la vora de la pantalla en posico horizontal es mor
+
   if (snake.x < 0) {
     snake.x = canvas.width - grid;
+    snake.x = 0;
+    snake.x = 320;
+    snake.y = 320;
+    snake.cells = [];
+    snake.maxCells = 2;
+    snake.dx = grid;
+    snake.dy = 0;
+
+    apple.x = getRandomInt(0, 50) * grid;
+    apple.y = getRandomInt(0, 50) * grid;
+      document.getElementById('choque').play();
+
+      alert("Has mort!");
+      location.reload();
   }
   else if (snake.x >= canvas.width) {
     snake.x = 0;
+    snake.x = 320;
+    snake.y = 320;
+    snake.cells = [];
+    snake.maxCells = 2;
+    snake.dx = grid;
+    snake.dy = 0;
+    puntos = 0;
+
+    apple.x = getRandomInt(0, 50) * grid;
+    apple.y = getRandomInt(0, 50) * grid;
+    document.getElementById('choque').play() ;
+    alert("Has mort!");
+    location.reload();
   }
 
-  // wrap snake position vertically on edge of screen
+  //  si surt la vora de la pantalla   en posico vertical de la pantalla mor
   if (snake.y < 0) {
     snake.y = canvas.height - grid;
+    snake.x = canvas.width - grid;
+    snake.x = 0;
+    snake.x = 320;
+    snake.y = 320;
+    snake.cells = [];
+    snake.maxCells = 2;
+    snake.dx = grid;
+    snake.dy = 0;
+      document.getElementById('choque').play() ;
+
+      alert("Has mort!");
+      location.reload();
   }
   else if (snake.y >= canvas.height) {
     snake.y = 0;
+    snake.x = canvas.width - grid;
+    snake.x = 0;
+    snake.x = 320;
+    snake.y = 320;
+    snake.cells = [];
+    snake.maxCells = 2;
+    snake.dx = grid;
+    snake.dy = 0;
+
+      document.getElementById('choque').play();
+
+      alert("Has mort!");
+      location.reload();
+
   }
 
-  // keep track of where snake has been. front of the array is always the head
+  // Mantenga un registro de dónde ha estado la serpiente. el frente de la matriz es siempre la cabeza
   snake.cells.unshift({x: snake.x, y: snake.y});
 
-  // remove cells as we move away from them
+  // eliminar células a medida que nos alejamos de ellas
+
   if (snake.cells.length > snake.maxCells) {
     snake.cells.pop();
   }
 
   // draw apple
   context.fillStyle = 'red';
-  context.fillRect(apple.x, apple.y, grid-1, grid-1);
+  context.fillRect(apple.x, apple.y, grid -4, grid -4);
 
   // dibuixa una serp una cel·la a la vegada
   context.fillStyle = 'green';
   snake.cells.forEach(function(cell, index) {
+
+    function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score: "+score, 8, 20);
+    }
+
+
 
     // dibuixar 1 px més petit que la quadrícula crea un efecte de quadrícula al cos de la serp perquè pugueu veure quant de temps té
 
@@ -110,25 +197,30 @@ function loop() {
     if (cell.x === apple.x && cell.y === apple.y) {
       snake.maxCells++;
 
+      document.getElementById('audio').play();
+
       // el llenç té 400x400, és a dir, quadrícules de 25x25
-      apple.x = getRandomInt(0, 25) * grid;
-      apple.y = getRandomInt(0, 25) * grid;
+      apple.x = getRandomInt(0, 50) * grid;
+      apple.y = getRandomInt(0, 50) * grid;
+      puntos++
+
+      document.getElementById("a").innerHTML = "Els teus punts son:"+ puntos;
     }
 
     // diable col·lisió amb totes les cel·les després d'aquest (tipus de bombolla modificat)
     for (var i = index + 1; i < snake.cells.length; i++) {
 
-      //la serp ocupa el mateix espai que una part del cos. restableix el joc
+      //si la serp es menja a ella mateixa es  . restableix el joc
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-        snake.x = 160;
-        snake.y = 160;
+        snake.x = 320;
+        snake.y = 320;
         snake.cells = [];
-        snake.maxCells = 4;
+        snake.maxCells = 2;
         snake.dx = grid;
         snake.dy = 0;
 
-        apple.x = getRandomInt(0, 25) * grid;
-        apple.y = getRandomInt(0, 25) * grid;
+        apple.x = getRandomInt(0, 50) * grid;
+        apple.y = getRandomInt(0, 50) * grid;
       }
     }
   });
@@ -145,29 +237,33 @@ document.addEventListener('keydown', function(e) {
 
 
   // tecla de fletxa esquerra
-  if (e.which === 37 && snake.dx === 0) {
+  if (e.which === 65 && snake.dx === 0) {
     snake.dx = -grid;
     snake.dy = 0;
+
   }
   // tecla de fletxa cap amunt
-  else if (e.which === 38 && snake.dy === 0) {
+  else if (e.which === 87 && snake.dy === 0) {
     snake.dy = -grid;
     snake.dx = 0;
   }
   // tecla de fletxa dreta
-  else if (e.which === 39 && snake.dx === 0) {
+  else if (e.which === 68 && snake.dx === 0) {
     snake.dx = grid;
     snake.dy = 0;
   }
   // tecla de fletxa avall
-  else if (e.which === 40 && snake.dy === 0) {
+  else if (e.which === 83 && snake.dy === 0) {
     snake.dy = grid;
     snake.dx = 0;
   }
 });
 
+
+
 // començar el joc
 requestAnimationFrame(loop);
 </script>
+<h1 id="a">Els teus punts son:</h1>
 </body>
 </html>
