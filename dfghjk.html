@@ -48,6 +48,7 @@
 <canvas width="592" height="592" id="game"></canvas>
 <script>
 
+document.getElementById('tetris').play();
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 var puntos = 0;
@@ -268,6 +269,34 @@ document.addEventListener('keydown', function(e) {
 
 // començar el joc
 requestAnimationFrame(loop);
+function play(){
+  audio.play();
+}
+
+function pause(){
+  if (audio.paused){
+    audio.play();
+  }else{
+    audio.pause();
+  }
+}
+
+function stop(){
+  audio.pause();
+  audio.currentTime = 0;
+}
+
+function turnUpVolume(){
+  if (audio.volume<0.9){
+    audio.volume+=0.1;
+  }
+}
+
+function turnDownVolume(){
+  if (audio.volume>0.1){
+    audio.volume-=0.1;
+  }
+}
 </script>
 <h1 id="a">Els teus punts son:</h1>
 </body>
