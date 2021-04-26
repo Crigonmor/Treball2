@@ -40,7 +40,7 @@
 </audio>
 
 
-<canvas width="800" height="800" id="game"></canvas>
+<canvas width="592" height="592" id="game"></canvas>
 <script>
 
 var canvas = document.getElementById('game');
@@ -106,8 +106,8 @@ function loop() {
     snake.dx = grid;
     snake.dy = 0;
 
-    apple.x = getRandomInt(0, 50) * grid;
-    apple.y = getRandomInt(0, 50) * grid;
+    apple.x = getRandomInt(0, 37) * grid;
+    apple.y = getRandomInt(0, 37) * grid;
       document.getElementById('choque').play();
 
       alert("Has mort!");
@@ -123,8 +123,8 @@ function loop() {
     snake.dy = 0;
     puntos = 0;
 
-    apple.x = getRandomInt(0, 50) * grid;
-    apple.y = getRandomInt(0, 50) * grid;
+    apple.x = getRandomInt(0, 37) * grid;
+    apple.y = getRandomInt(0, 37) * grid;
     document.getElementById('choque').play() ;
     alert("Has mort!");
     location.reload();
