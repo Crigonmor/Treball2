@@ -23,6 +23,7 @@
   }
   audio{
     visibility:  hidden;
+    volume = 1.0;
   }
   #a{
     display: flex;
@@ -274,9 +275,13 @@ document.addEventListener('keydown', function(e) {
 
 // començar el joc
 requestAnimationFrame(loop);
+var audio = document.getElementById("tetris");
+ audio.volume = 0.5;
+
 function play(){
   audio.play();
 }
+
 
 function pause(){
   if (audio.paused){
@@ -292,7 +297,7 @@ function stop(){
 }
 
 function turnUpVolume(){
-  if (audio.volume<0.9){
+  if (audio.volume<5.9){
     audio.volume+=0.1;
   }
 }
