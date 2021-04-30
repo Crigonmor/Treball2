@@ -1,0 +1,145 @@
+<<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<style>
+
+body {
+  background-color: #F9F9F9;
+}
+.container {
+  margin: 0 auto;
+  padding: 5em 0;
+  text-align: center;
+  display: block;
+}
+.t-title {
+  color: white;
+  position: relative;
+  display: inline-block;
+  -webkit-animation-name: t-tile; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 0.3s; /* Chrome, Safari, Opera */
+  animation-name: t-title;
+  animation-duration: 0.3s;
+  animation-iteration-count: infinite;
+  font-family: 'VT323', monospace;
+  text-transform: uppercase;
+  font-size: 5rem;
+  font-weight: 500;
+  margin: 0 auto;
+  text-shadow: 1px 1px 10px white;
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes t-tile {
+  0%   { left:0px; top:0px; text-shadow: 0 0 10px red; }
+  25%  { left:10px; top:0px; text-shadow: 0 0 5px yellow; }
+  50%  { left:10px; top:10px; text-shadow: 0 0 7px blue; }
+  75%  { left:0px; top:10px; text-shadow: 0 0 15px green; }
+  100% { left:0px; top:0px; text-shadow: 0 0 0 red; }
+}
+@keyframes t-title {
+  0%   { left:0px; top:0px; text-shadow: 0 0 10px red; }
+  25%  { left:10px; top:0px; text-shadow: 0 0 5px yellow; }
+  50%  { left:10px; top:10px; text-shadow: 0 0 7px blue; }
+  75%  { left:0px; top:10px; text-shadow: 0 0 15px green; }
+  100% { left:0px; top:0px; text-shadow: 0 0 0 red; }
+}
+.t-title:hover {
+  -webkit-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+  -o-animation-play-state: paused;
+  animation-play-state: paused;
+  cursor: pointer;
+}
+.t-title a.go {
+  text-decoration: none;
+  color: transparent;
+  transition: visibility 1s, opacity 1s ease-out;
+  visibility: visible;
+  opacity: 1;
+}
+.t-title a.go:hover {
+  color: white;
+  text-shadow: 0 0 1px black;
+  -webkit-animation-name: t-tile-hover; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: .1s; /* Chrome, Safari, Opera */
+  animation-name: t-title-hover;
+  animation-duration: .1s;
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes t-tile-hover {
+  0%  { text-shadow: 0 0 5px gray; }
+  100% { text-shadow: 0 0 1px white; }
+}
+@keyframes t-title-hover {
+  0%  { text-shadow: 0 0 5px gray; }
+  100% { text-shadow: 0 0 1px white; }
+}
+.poem {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 3s, opacity 4s;
+  display: none;
+}
+footer {
+  margin: 0 auto;
+  position: fixed;
+  bottom: 3em;
+  text-align: center;
+  width: 100%;
+}
+footer p {
+  font-family: "Verdana", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  font-size: small;
+  color: #aaa;
+}
+footer span {
+  color: #ccc;
+}
+a {
+  color: #aaa;
+}
+a:hover {
+  color: #666;
+}
+
+</style>
+
+</head>
+
+<body>
+  <div class="container">
+    <span class="t-title"><a class="go">SNAKE GAME</a></span>
+    <div class="poem">
+      <!--yoink-->
+    </div>
+  </div>
+<script>
+
+$('.t-title .go').click(function() {
+  var val = 10,
+      faded = {
+        visibility: 'hidden',
+        opacity: '0',
+      },
+      air = {
+        display: 'inline',
+        visibility: 'visible',
+        opacity: '1'
+      }
+  if ($(this).css('visibility') == 'visible') {
+    $(this).css(faded);
+    $('.poem').css(air);
+  } else {
+    $(this).css('visibility', '');
+  }
+});
+
+</script>
+
+</body>
+
+</html>
