@@ -38,6 +38,32 @@
     border:solid 5px;
     font-size:30px;
   }
+  #p1 {
+    color: #CCC9DC;
+    position: absolute;
+    /* left: 100px; */
+    top: 10px;
+    font-family: cursive;
+    font-size: x-large;
+  }
+
+  #p2 {
+    color: #CCC9DC;
+    position: absolute;
+    /* left: 100px; */
+    top: 30px;
+    font-family: cursive;
+    font-size: x-large;
+    margin-top: 35px;
+  }
+
+  #score {
+    color: yellow;
+  }
+
+  #high {
+    color: #E43F5A;
+  }
   </style>
 </head>
 <body>
@@ -48,7 +74,7 @@
 <source src="jab-jab.mp3" type="audio/mpeg"> Your browser does not support the audio element.
 </audio>
 <audio id="tetris" controls style="display:none">
-<source src="te.mp3" type="audio/mpeg"> Your browser does not support the audio element.
+<source src="t" type="audio/mpeg"> Your browser does not support the audio element.
 </audio>
 
 
@@ -63,6 +89,7 @@ var puntos = 0;
 var grid = 16;
 var count = 0;
 var score = 0;
+var max = 0;
 
 
 var snake = {
@@ -80,7 +107,7 @@ var snake = {
   // longitud de la serpiente. crece al comer una manzana
   maxCells: 2
 };
-var apple = {
+var food = {
   x: 320,
   y: 320
 };
@@ -100,12 +127,14 @@ function loop() {
     return;
   }
 
+
   count = 0;
   context.clearRect(0,0,canvas.width,canvas.height);
 
   // mueve la serpiente por su velocidad
   snake.x += snake.dx;
   snake.y += snake.dy;
+
 
      // si surt de la vora de la pantalla en posico horizontal es mor
 
@@ -119,12 +148,20 @@ function loop() {
     snake.dx = grid;
     snake.dy = 0;
 
-    apple.x = getRandomInt(0, 37) * grid;
-    apple.y = getRandomInt(0, 37) * grid;
+    if (score > max) {
+      max = score;
+    }
+
+
+    score = 0;
+
+    document.getElementById('high').innerHTML = '&nbsp;' + max;
+
+
       document.getElementById('choque').play();
 
-      alert("Has mort!");
-      location.reload();
+
+
   }
   else if (snake.x >= canvas.width) {
     snake.x = 0;
@@ -134,13 +171,25 @@ function loop() {
     snake.maxCells = 2;
     snake.dx = grid;
     snake.dy = 0;
-    puntos = 0;
+    food.x = getRandomInt(0, 37) * grid;
+    food.y = getRandomInt(0, 37) * grid;
 
-    apple.x = getRandomInt(0, 37) * grid;
-    apple.y = getRandomInt(0, 37) * grid;
-    document.getElementById('choque').play() ;
-    alert("Has mort!");
-    location.reload();
+document.getElementById('choque').play();
+
+    if (score > max) {
+      max = score;
+    }
+
+
+    score = 0;
+
+    document.getElementById('high').innerHTML = '&nbsp;' + max;
+
+
+
+
+
+
   }
 
   //  si surt la vora de la pantalla   en posico vertical de la pantalla mor
@@ -156,8 +205,18 @@ function loop() {
     snake.dy = 0;
       document.getElementById('choque').play() ;
 
-      alert("Has mort!");
-      location.reload();
+      if (score > max) {
+        max = score;
+      }
+
+
+      score = 0;
+
+      document.getElementById('high').innerHTML = '&nbsp;' + max;
+
+
+        document.getElementById('choque').play();
+
   }
   else if (snake.y >= canvas.height) {
     snake.y = 0;
@@ -172,10 +231,20 @@ function loop() {
 
       document.getElementById('choque').play();
 
-      alert("Has mort!");
-      location.reload();
+      if (score > max) {
+        max = score;
+      }
+
+
+      score = 0;
+
+      document.getElementById('high').innerHTML = '&nbsp;' + max;
+
+
+        document.getElementById('choque').play();
 
   }
+
 
   // Mantenga un registro de dónde ha estado la serpiente. el frente de la matriz es siempre la cabeza
   snake.cells.unshift({x: snake.x, y: snake.y});
@@ -188,7 +257,7 @@ function loop() {
 
   // draw apple
   context.fillStyle = 'red';
-  context.fillRect(apple.x, apple.y, grid -4, grid -4);
+  context.fillRect(food.x, food.y, grid -4, grid -4);
 
   // dibuixa una serp una cel·la a la vegada
   context.fillStyle = 'green';
@@ -207,14 +276,16 @@ function loop() {
     context.fillRect(cell.x, cell.y, grid-1, grid-1);
 
     // la serp va menjar poma
-    if (cell.x === apple.x && cell.y === apple.y) {
+    if (cell.x === food.x && cell.y === food.y) {
       snake.maxCells++;
+      score += 1;
+      document.getElementById('score').innerHTML = '&nbsp;' + score;
 
       document.getElementById('audio').play();
 
       // el llenç té 400x400, és a dir, quadrícules de 25x25
-      apple.x = getRandomInt(0, 37) * grid;
-      apple.y = getRandomInt(0, 37) * grid;
+      food.x = getRandomInt(0, 37) * grid;
+      food.y = getRandomInt(0, 37) * grid;
       puntos++
 
       document.getElementById("a").innerHTML = "Els teus punts son:"+ puntos;
@@ -225,17 +296,19 @@ function loop() {
 
       //si la serp es menja a ella mateixa es  . restableix el joc
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-        snake.x = 320;
-        snake.y = 320;
+        if (score > max) {
+          max = score;
+        }
+        snake.x = 160;
+        snake.y = 160;
         snake.cells = [];
         snake.maxCells = 2;
         snake.dx = grid;
         snake.dy = 0;
-
-        apple.x = getRandomInt(0, 37) * grid;
-        apple.y = getRandomInt(0, 37) * grid;
-        alert("Tas mossegat la cua!!");
-        location.reload();
+        score = 0;
+        food.x = getRandomInt(0, 25) * grid;
+        food.y = getRandomInt(0, 25) * grid;
+        document.getElementById('high').innerHTML = '&nbsp;' + max;
       }
     }
   });
@@ -272,6 +345,7 @@ document.addEventListener('keydown', function(e) {
     snake.dy = grid;
     snake.dx = 0;
   }
+
 });
 
 
@@ -311,7 +385,12 @@ function turnDownVolume(){
   }
 }
 
+
 </script>
-<button id="a">Els teus punts son:</button>
+
+
+<p id="p1">Score:<span  id="score"></span></p>
+<p id="p2">High Score:<span id="high"></span></p>
+
 </body>
 </html>
