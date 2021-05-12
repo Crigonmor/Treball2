@@ -19,8 +19,9 @@ $nr = mysqli_num_rows($query);
 
 if($nr == 1)
 {
-	//header("Location: pagina.html")
+
 	echo "Benvingut:" .$nombre;
+	 
 }
 else if ($nr == 0)
 {
