@@ -21,6 +21,7 @@
     border: 1px solid white;
     background-image: url('Pixel_art_grass_image.png');
   }
+  /* cuadrat joc */
   audio{
     visibility:  hidden;
     volume = 1.0;
@@ -96,15 +97,15 @@ var snake = {
   x: 160,
   y: 160,
 
-  // velocidad de la serpiente. mueve una longitud de cuadrícula en cada fotograma en la dirección xo y
+  // velocitat de la serp. mou una longitud de quadrícula en cada fotograma en la direcció x o i
 
   dx: grid,
   dy: 0,
 
-  // realiza un seguimiento de todas las cuadrículas que ocupa el cuerpo de la serpiente
+  // realitza un seguiment de totes les quadrícules que ocupa el cos de la serp
   cells: [],
 
-  // longitud de la serpiente. crece al comer una manzana
+  // longitud de la serp. creix a l'menjar una poma en el nostre cas 2
   maxCells: 2
 };
 var food = {
@@ -112,8 +113,8 @@ var food = {
   y: 320
 };
 
-// obtener números enteros aleatorios en un rango específico
-// @ver https://stackoverflow.com/a/1527820/2124254
+// obtenir nombres enters aleatoris en un rang seleccionat
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -122,8 +123,8 @@ function getRandomInt(min, max) {
 function loop() {
   requestAnimationFrame(loop);
 
-  // bucle de juego lento a 15 fps en lugar de 60 (60/15 = 4)
-  if (++count < 3) {
+  // // bucle de joc lent a 15 fps en lloc de 60 (60/15 = 4)
+  if (++count < 4) {
     return;
   }
 
@@ -131,7 +132,7 @@ function loop() {
   count = 0;
   context.clearRect(0,0,canvas.width,canvas.height);
 
-  // mueve la serpiente por su velocidad
+  // mou la serp per la seva velocitat
   snake.x += snake.dx;
   snake.y += snake.dy;
 
@@ -147,6 +148,8 @@ function loop() {
     snake.maxCells = 2;
     snake.dx = grid;
     snake.dy = 0;
+    food.x = getRandomInt(0, 37) * grid;
+    food.y = getRandomInt(0, 37) * grid;
 
     if (score > max) {
       max = score;
@@ -203,6 +206,8 @@ document.getElementById('choque').play();
     snake.maxCells = 2;
     snake.dx = grid;
     snake.dy = 0;
+    food.x = getRandomInt(0, 37) * grid;
+    food.y = getRandomInt(0, 37) * grid;
       document.getElementById('choque').play() ;
 
       if (score > max) {
@@ -228,6 +233,8 @@ document.getElementById('choque').play();
     snake.maxCells = 2;
     snake.dx = grid;
     snake.dy = 0;
+    food.x = getRandomInt(0, 37) * grid;
+    food.y = getRandomInt(0, 37) * grid;
 
       document.getElementById('choque').play();
 
@@ -246,16 +253,16 @@ document.getElementById('choque').play();
   }
 
 
-  // Mantenga un registro de dónde ha estado la serpiente. el frente de la matriz es siempre la cabeza
+  // registre d'on ha estat la serp. el front de la matriu és sempre el cap
   snake.cells.unshift({x: snake.x, y: snake.y});
 
-  // eliminar células a medida que nos alejamos de ellas
+  // eliminar cèl·lules a mesura que ens allunyem d'elles
 
   if (snake.cells.length > snake.maxCells) {
     snake.cells.pop();
   }
 
-  // draw apple
+  // dibuixar poma
   context.fillStyle = 'red';
   context.fillRect(food.x, food.y, grid -4, grid -4);
 
@@ -266,7 +273,7 @@ document.getElementById('choque').play();
     function drawScore() {
         ctx.font = "16px Arial";
         ctx.fillStyle = "#0095DD";
-        ctx.fillText("Score: "+score, 8, 20);
+
     }
 
 
@@ -283,7 +290,7 @@ document.getElementById('choque').play();
 
       document.getElementById('audio').play();
 
-      // el llenç té 400x400, és a dir, quadrícules de 25x25
+      // el llenç té 16x37=592x592, és a dir, quadrícules de 37x37
       food.x = getRandomInt(0, 37) * grid;
       food.y = getRandomInt(0, 37) * grid;
       puntos++
@@ -391,6 +398,7 @@ function turnDownVolume(){
 
 <p id="p1">Score:<span  id="score"></span></p>
 <p id="p2">High Score:<span id="high"></span></p>
+
 
 </body>
 </html>
